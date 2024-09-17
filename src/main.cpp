@@ -4,8 +4,6 @@
 
 int main()
 {
-    std::cout << "Hello, World!" << std::endl;
-
     auto engine = PricingEngine(std::make_unique<BSMModel>());
 
     const auto S = 100.0;
