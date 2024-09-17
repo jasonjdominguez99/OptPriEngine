@@ -11,3 +11,8 @@ double PricingEngine::calculateCallPrice(const StrategyParameters strategyParams
 {
     return m_pricingStrategy->calculateCallPrice(strategyParams);
 }
+
+void PricingEngine::setPricingStrategy(std::unique_ptr<PricingStrategy>&& pricingStrategy)
+{
+    m_pricingStrategy = std::move(pricingStrategy);
+}

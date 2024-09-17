@@ -9,4 +9,4 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Add all the source files for your project
-add_executable(OptPriEngine main.cpp PricingEngine.cpp BSMModel.cpp)
+add_executable(OptPriEngine main.cpp PricingEngine.cpp BSMModel.cpp BinomialTreeModel.cpp)

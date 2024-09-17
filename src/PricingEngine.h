@@ -12,6 +12,8 @@ public:
 
     double calculateCallPrice(const StrategyParameters strategyParams);
 
+    void setPricingStrategy(std::unique_ptr<PricingStrategy>&& pricingStrategy);
+
 private:
     std::unique_ptr<PricingStrategy> m_pricingStrategy;
 };
