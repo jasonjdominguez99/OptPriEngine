@@ -37,6 +37,8 @@ int main()
     std::cout << "Number of time steps: " << numTimeSteps << std::endl;
     const double callPriceBinomial = engine.calculateCallPrice(strategyParams);
     std::cout << "Call price: " << callPriceBinomial << std::endl;
+    const double putPriceBinomial = engine.calculatePutPrice(strategyParams);
+    std::cout << "Put price: " << putPriceBinomial << std::endl;
 
     return 0;
 }
