@@ -27,6 +27,8 @@ int main()
     std::cout << "\nBlack-Scholes-Merton model:" << std::endl;
     const double callPriceBSM = engine.calculateCallPrice(strategyParams);
     std::cout << "Call price: " << callPriceBSM << std::endl;
+    const double putPriceBSM = engine.calculatePutPrice(strategyParams);
+    std::cout << "Put price: " << putPriceBSM << std::endl;
 
     // Binomial tree model
     std::cout << "\nBinomial tree model:" << std::endl;

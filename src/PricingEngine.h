@@ -11,6 +11,7 @@ public:
     PricingEngine(std::unique_ptr<PricingStrategy>&& pricingStrategy);
 
     double calculateCallPrice(const StrategyParameters strategyParams);
+    double calculatePutPrice(const StrategyParameters strategyParams);
 
     void setPricingStrategy(std::unique_ptr<PricingStrategy>&& pricingStrategy);
 
