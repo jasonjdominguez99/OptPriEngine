@@ -30,7 +30,7 @@ int main()
 
     // Binomial tree model
     std::cout << "\nBinomial tree model:" << std::endl;
-    const size_t numTimeSteps = 1000;
+    const int numTimeSteps = 1000;
     engine.setPricingStrategy(std::make_unique<BinomialTreeModel>(numTimeSteps));
     std::cout << "Number of time steps: " << numTimeSteps << std::endl;
     const double callPriceBinomial = engine.calculateCallPrice(strategyParams);

@@ -7,12 +7,12 @@
 class BinomialTreeModel : public PricingStrategy
 {
 public:
-    BinomialTreeModel(const size_t numTimeSteps);
+    BinomialTreeModel(const int numTimeSteps);
     ~BinomialTreeModel() override = default;
 
     double calculateCallPrice(const StrategyParameters strategyParams) override;
     double calculatePutPrice(const StrategyParameters strategyParams) override;
 
 private:
-    size_t m_numTimeSteps;
+    int m_numTimeSteps;
 };

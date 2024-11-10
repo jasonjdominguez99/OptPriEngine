@@ -3,8 +3,8 @@
 #include <cmath>
 #include <vector>
 
-BinomialTreeModel::BinomialTreeModel(const size_t numTimeSteps) :
-    m_numTimeSteps(numTimeSteps)
+BinomialTreeModel::BinomialTreeModel(const int numTimeSteps) :
+    m_numTimeSteps(numTimeSteps > 0 ? numTimeSteps : 1) // silently enforce minimum number of time steps
 {
 }
 
@@ -12,12 +12,12 @@ double BinomialTreeModel::calculateCallPrice(const StrategyParameters strategyPa
 {
     auto [S, K, r, sigma, T] = strategyParams;
 
-    const auto dt = T / m_numTimeSteps;
-    const auto u = std::exp(sigma * std::sqrt(dt));
-    const auto d = 1.0 / u;
-    const auto p = (std::exp(r * dt) - d) / (u - d);
+    const double dt = T / m_numTimeSteps;
+    const double u = std::exp(sigma * std::sqrt(dt));
+    const double d = 1.0 / u;
+    const double p = (std::exp(r * dt) - d) / (u - d);
 
-    const auto maxNumNodes = m_numTimeSteps + 1;
+    const size_t maxNumNodes = static_cast<size_t>(m_numTimeSteps + 1);
 
     // Calculate possible asset prices at maturity
     std::vector<double> assetPrices(maxNumNodes);
@@ -37,7 +37,7 @@ double BinomialTreeModel::calculateCallPrice(const StrategyParameters strategyPa
     // Calculate call prices at each time step in place, working bakwards
     for (int timeStep = m_numTimeSteps - 1; timeStep >= 0; --timeStep)
     {
-        for (size_t i = 0; i <= timeStep; ++i)
+        for (size_t i = 0; i <= static_cast<size_t>(timeStep); ++i)
         {
             callPrices[i] = std::exp(-r * dt) * (p * callPrices[i] + (1 - p) * callPrices[i + 1]);
         }
@@ -48,5 +48,6 @@ double BinomialTreeModel::calculateCallPrice(const StrategyParameters strategyPa
 
 double BinomialTreeModel::calculatePutPrice(const StrategyParameters strategyParams)
 {
+    // TODO: Implement put price calculation
     return 0.0;
 }
