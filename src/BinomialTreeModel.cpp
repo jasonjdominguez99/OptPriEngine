@@ -10,7 +10,7 @@ BinomialTreeModel::BinomialTreeModel(const int numTimeSteps) :
 
 double BinomialTreeModel::calculateCallPrice(const StrategyParameters strategyParams)
 {
-    auto [S, K, r, sigma, T] = strategyParams;
+    auto [S, K, sigma, r, T] = strategyParams;
 
     const double dt = T / m_numTimeSteps;
     const double u = std::exp(sigma * std::sqrt(dt));
