@@ -27,7 +27,7 @@ double BinomialTreeModel::calculateCallPrice(const StrategyParameters strategyPa
         callPrices[i] = std::max(0.0, assetPrices[i] - K);
     }
 
-    // Calculate call prices at each time step in place, working bakwards
+    // Calculate call prices at each time step in place, working backwards
     for (int timeStep = m_numTimeSteps - 1; timeStep >= 0; --timeStep)
     {
         for (size_t i = 0; i <= static_cast<size_t>(timeStep); ++i)
@@ -59,7 +59,7 @@ double BinomialTreeModel::calculatePutPrice(const StrategyParameters strategyPar
         putPrices[i] = std::max(0.0, K - assetPrices[i]);
     }
 
-    // Calculate put prices at each time step in place, working bakwards
+    // Calculate put prices at each time step in place, working backwards
     for (int timeStep = m_numTimeSteps - 1; timeStep >= 0; --timeStep)
     {
         for (size_t i = 0; i <= static_cast<size_t>(timeStep); ++i)
