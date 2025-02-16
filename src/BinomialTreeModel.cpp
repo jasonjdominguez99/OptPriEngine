@@ -2,7 +2,8 @@
 
 #include <cmath>
 
-BinomialTreeModel::BinomialTreeModel(const int numTimeSteps) :
+BinomialTreeModel::BinomialTreeModel(const int numTimeSteps, const OptionStyle optionStyle) :
+    PricingStrategy(optionStyle),
     m_numTimeSteps(numTimeSteps > 0 ? numTimeSteps : 1) // silently enforce minimum number of time steps
 {
 }
@@ -32,7 +33,9 @@ double BinomialTreeModel::calculateCallPrice(const StrategyParameters strategyPa
     {
         for (size_t i = 0; i <= static_cast<size_t>(timeStep); ++i)
         {
-            callPrices[i] = std::exp(-r * dt) * (p * callPrices[i] + (1 - p) * callPrices[i + 1]);
+            const double earlyExerciseValue = m_optionStyle == OptionStyle::American ? std::max(0.0, getAssetPriceAtNode(S, u, d, timeStep, i) - K) : 0.0;
+            const double callOptionValue = std::exp(-r * dt) * (p * callPrices[i] + (1 - p) * callPrices[i + 1]);
+            callPrices[i] = std::max(earlyExerciseValue, callOptionValue);
         }
     }
 
@@ -64,7 +67,9 @@ double BinomialTreeModel::calculatePutPrice(const StrategyParameters strategyPar
     {
         for (size_t i = 0; i <= static_cast<size_t>(timeStep); ++i)
         {
-            putPrices[i] = std::exp(-r * dt) * (p * putPrices[i] + (1 - p) * putPrices[i + 1]);
+            const double earlyExerciseValue = m_optionStyle == OptionStyle::American ? std::max(0.0, K - getAssetPriceAtNode(S, u, d, timeStep, i)) : 0.0;
+            const double putOptionValue = std::exp(-r * dt) * (p * putPrices[i] + (1 - p) * putPrices[i + 1]);
+            putPrices[i] = std::max(earlyExerciseValue, putOptionValue);
         }
     }
 
@@ -81,4 +86,9 @@ std::vector<double> BinomialTreeModel::calculateAssetPrices(const double S, cons
     }
 
     return assetPrices;
+}
+
+double BinomialTreeModel::getAssetPriceAtNode(const double S, const double u, const double d, const int timeStep, const int nodeIndex) const
+{
+    return S * std::pow(u, timeStep - nodeIndex) * std::pow(d, nodeIndex);
 }

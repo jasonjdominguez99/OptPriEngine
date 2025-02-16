@@ -30,15 +30,24 @@ int main()
     const double putPriceBSM = engine.calculatePutPrice(strategyParams);
     std::cout << "Put price: " << putPriceBSM << std::endl;
 
-    // Binomial tree model
-    std::cout << "\nBinomial tree model:" << std::endl;
+    // Binomial tree model (European style option)
+    std::cout << "\nBinomial tree model (European style option):" << std::endl;
     const int numTimeSteps = 1000;
-    engine.setPricingStrategy(std::make_unique<BinomialTreeModel>(numTimeSteps));
+    engine.setPricingStrategy(std::make_unique<BinomialTreeModel>(numTimeSteps, OptionStyle::European));
     std::cout << "Number of time steps: " << numTimeSteps << std::endl;
-    const double callPriceBinomial = engine.calculateCallPrice(strategyParams);
-    std::cout << "Call price: " << callPriceBinomial << std::endl;
-    const double putPriceBinomial = engine.calculatePutPrice(strategyParams);
-    std::cout << "Put price: " << putPriceBinomial << std::endl;
+    const double callPriceEuropeanBinomial = engine.calculateCallPrice(strategyParams);
+    std::cout << "Call price: " << callPriceEuropeanBinomial << std::endl;
+    const double putPriceEuropeanBinomial = engine.calculatePutPrice(strategyParams);
+    std::cout << "Put price: " << putPriceEuropeanBinomial << std::endl;
+
+    // Binomial tree model (American style option)
+    std::cout << "\nBinomial tree model (American style option):" << std::endl;
+    engine.setPricingStrategy(std::make_unique<BinomialTreeModel>(numTimeSteps, OptionStyle::American));
+    std::cout << "Number of time steps: " << numTimeSteps << std::endl;
+    const double callPriceAmericanBinomial = engine.calculateCallPrice(strategyParams);
+    std::cout << "Call price: " << callPriceAmericanBinomial << std::endl;
+    const double putPriceAmericanBinomial = engine.calculatePutPrice(strategyParams);
+    std::cout << "Put price: " << putPriceAmericanBinomial << std::endl;
 
     return 0;
 }
