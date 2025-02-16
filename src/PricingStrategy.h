@@ -22,8 +22,8 @@ public:
         m_optionStyle(optionStyle) {};
     virtual ~PricingStrategy() = default;
 
-    virtual double calculateCallPrice(const StrategyParameters strategyParams) = 0;
-    virtual double calculatePutPrice(const StrategyParameters strategyParams) = 0;
+    [[nodiscard]] virtual double calculateCallPrice(const StrategyParameters strategyParams) const = 0;
+    [[nodiscard]] virtual double calculatePutPrice(const StrategyParameters strategyParams) const = 0;
 
 protected:
     OptionStyle m_optionStyle;

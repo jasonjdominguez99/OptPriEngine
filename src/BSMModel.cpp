@@ -10,7 +10,7 @@ namespace
     }
 }
 
-double BSMModel::calculateCallPrice(const StrategyParameters strategyParams)
+double BSMModel::calculateCallPrice(const StrategyParameters strategyParams) const
 {
     auto [K, S, sigma, r, T] = strategyParams;
 
@@ -20,7 +20,7 @@ double BSMModel::calculateCallPrice(const StrategyParameters strategyParams)
     return S * normalCDF(d1) - K * std::exp(-r * T) * normalCDF(d2);
 }
 
-double BSMModel::calculatePutPrice(const StrategyParameters strategyParams)
+double BSMModel::calculatePutPrice(const StrategyParameters strategyParams) const
 {
     auto [K, S, sigma, r, T] = strategyParams;
 

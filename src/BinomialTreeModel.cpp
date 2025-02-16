@@ -8,7 +8,7 @@ BinomialTreeModel::BinomialTreeModel(const int numTimeSteps, const OptionStyle o
 {
 }
 
-double BinomialTreeModel::calculateCallPrice(const StrategyParameters strategyParams)
+double BinomialTreeModel::calculateCallPrice(const StrategyParameters strategyParams) const
 {
     auto [S, K, sigma, r, T] = strategyParams;
 
@@ -42,7 +42,7 @@ double BinomialTreeModel::calculateCallPrice(const StrategyParameters strategyPa
     return callPrices[0];
 }
 
-double BinomialTreeModel::calculatePutPrice(const StrategyParameters strategyParams)
+double BinomialTreeModel::calculatePutPrice(const StrategyParameters strategyParams) const
 {
     auto [S, K, sigma, r, T] = strategyParams;
 

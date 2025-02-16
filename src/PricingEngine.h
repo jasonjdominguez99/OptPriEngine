@@ -8,10 +8,10 @@ struct StrategyParameters;
 class PricingEngine
 {
 public:
-    PricingEngine(std::unique_ptr<PricingStrategy>&& pricingStrategy);
+    explicit PricingEngine(std::unique_ptr<PricingStrategy>&& pricingStrategy) noexcept;
 
-    double calculateCallPrice(const StrategyParameters strategyParams);
-    double calculatePutPrice(const StrategyParameters strategyParams);
+    [[nodiscard]] double calculateCallPrice(const StrategyParameters strategyParams) const;
+    [[nodiscard]] double calculatePutPrice(const StrategyParameters strategyParams) const;
 
     void setPricingStrategy(std::unique_ptr<PricingStrategy>&& pricingStrategy);
 
