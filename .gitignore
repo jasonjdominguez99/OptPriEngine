@@ -33,3 +33,9 @@
 
 # Build files
 build/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_store
