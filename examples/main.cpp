@@ -1,6 +1,6 @@
-#include "BSMModel.h"
-#include "BinomialTreeModel.h"
-#include "PricingEngine.h"
+#include "optpriengine/BSMModel.h"
+#include "optpriengine/BinomialTreeModel.h"
+#include "optpriengine/PricingEngine.h"
 #include <iostream>
 
 int main()
