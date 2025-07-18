@@ -47,8 +47,8 @@ int main()
     std::println();
     std::println("Binomial tree model (European style option):");
 
-    const int numTimeSteps = 1000;
-    const auto binomialEngine = PricingEngine<BinomialTreeModel>(BinomialTreeModel(numTimeSteps));
+    const size_t numTimeSteps = 1000;
+    const auto binomialEngine = PricingEngine<BinomialTreeModel<numTimeSteps>>(BinomialTreeModel<numTimeSteps>());
 
     std::println("Number of time steps: {}", numTimeSteps);
 

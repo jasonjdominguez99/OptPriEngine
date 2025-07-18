@@ -15,7 +15,6 @@ endif()
 # Create the library
 add_library(OptPriEngine
     src/BSMModel.cpp
-    src/BinomialTreeModel.cpp
     src/Utils.cpp
 )
 
