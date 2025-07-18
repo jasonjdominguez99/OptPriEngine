@@ -1,20 +1,33 @@
 #pragma once
 
+#include "StrategyParameters.h"
+
 #include <memory>
 
-class PricingStrategy;
-struct StrategyParameters;
+enum class OptionStyle;
 
+template <typename Strategy>
 class PricingEngine
 {
 public:
-    explicit PricingEngine(std::unique_ptr<PricingStrategy>&& pricingStrategy) noexcept;
+    explicit PricingEngine(Strategy&& pricingStrategy) noexcept 
+        : m_pricingStrategy(std::move(pricingStrategy)) {}
 
-    [[nodiscard]] double calculateCallPrice(const StrategyParameters strategyParams) const;
-    [[nodiscard]] double calculatePutPrice(const StrategyParameters strategyParams) const;
+    [[nodiscard]] static constexpr bool supportsOptionStyle(const OptionStyle style) noexcept
+    {
+        return Strategy::supportsOptionStyle(style);
+    }
 
-    void setPricingStrategy(std::unique_ptr<PricingStrategy>&& pricingStrategy);
+    [[nodiscard]] double calculateCallPrice(const StrategyParameters strategyParams, const OptionStyle optionStyle) const noexcept
+    {
+        return m_pricingStrategy.calculateCallPrice(strategyParams, optionStyle);
+    }
+
+    [[nodiscard]] double calculatePutPrice(const StrategyParameters strategyParams, const OptionStyle optionStyle) const noexcept
+    {
+        return m_pricingStrategy.calculatePutPrice(strategyParams, optionStyle);
+    }
 
 private:
-    std::unique_ptr<PricingStrategy> m_pricingStrategy;
+    Strategy m_pricingStrategy;
 };

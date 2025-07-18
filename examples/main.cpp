@@ -1,7 +1,11 @@
 #include "optpriengine/BSMModel.h"
 #include "optpriengine/BinomialTreeModel.h"
 #include "optpriengine/PricingEngine.h"
-#include <iostream>
+#include "optpriengine/Option.h"
+#include "optpriengine/Utils.h"
+
+#include <chrono>
+#include <print>
 
 int main()
 {
@@ -9,45 +13,64 @@ int main()
     const double S = 100.0;
     const double sigma = 0.33;
     const double r = 0.03;
-    const double T = 1.0 / 12.0; // 1 month
 
-    const auto strategyParams = StrategyParameters { K, S, sigma, r, T };
+    const auto expirationDate = std::chrono::year_month_day(std::chrono::year(2025), std::chrono::month(7), std::chrono::day(17));
+    const auto valuationDate = expirationDate - std::chrono::months(1); // 1 month before expiry
+
+    const auto marketData = MarketData { S, sigma, r };
 
     // Display parameters
-    std::cout << "Parameters:" << std::endl;
-    std::cout << "K: " << K << std::endl;
-    std::cout << "S: " << S << std::endl;
-    std::cout << "sigma: " << sigma << std::endl;
-    std::cout << "r: " << r << std::endl;
-    std::cout << "T: " << T << std::endl;
+    std::println("Parameters:");
+    std::println("K: {}", K);
+    std::println("S: {}", S);
+    std::println("sigma: {}", sigma);
+    std::println("r: {}", r);
+    std::println("Expiration date: {}", expirationDate);
+    std::println("Valuation date: {}", valuationDate);
+    std::println("Time to maturity: {:.3f} years", Utils::yearsBetween(valuationDate, expirationDate));
 
-    auto engine = PricingEngine(std::make_unique<BSMModel>());
+    auto europeanOption = Option<OptionStyle::European>(K, expirationDate);
 
     // Black-Scholes-Merton model
-    std::cout << "\nBlack-Scholes-Merton model:" << std::endl;
-    const double callPriceBSM = engine.calculateCallPrice(strategyParams);
-    std::cout << "Call price: " << callPriceBSM << std::endl;
-    const double putPriceBSM = engine.calculatePutPrice(strategyParams);
-    std::cout << "Put price: " << putPriceBSM << std::endl;
+    std::println();
+    std::println("Black-Scholes-Merton model:");
+
+    const auto blackScholesEngine = PricingEngine<BSMModel>(BSMModel());
+
+    const double callPriceBSM = europeanOption.callPrice(blackScholesEngine, marketData, valuationDate);
+    const double putPriceBSM = europeanOption.putPrice(blackScholesEngine, marketData, valuationDate);
+
+    std::println("Call price: {:.2f}", callPriceBSM);
+    std::println("Put price: {:.2f}", putPriceBSM);
 
     // Binomial tree model (European style option)
-    std::cout << "\nBinomial tree model (European style option):" << std::endl;
+    std::println();
+    std::println("Binomial tree model (European style option):");
+
     const int numTimeSteps = 1000;
-    engine.setPricingStrategy(std::make_unique<BinomialTreeModel>(numTimeSteps, OptionStyle::European));
-    std::cout << "Number of time steps: " << numTimeSteps << std::endl;
-    const double callPriceEuropeanBinomial = engine.calculateCallPrice(strategyParams);
-    std::cout << "Call price: " << callPriceEuropeanBinomial << std::endl;
-    const double putPriceEuropeanBinomial = engine.calculatePutPrice(strategyParams);
-    std::cout << "Put price: " << putPriceEuropeanBinomial << std::endl;
+    const auto binomialEngine = PricingEngine<BinomialTreeModel>(BinomialTreeModel(numTimeSteps));
+
+    std::println("Number of time steps: {}", numTimeSteps);
+
+    const double callPriceEuropeanBinomial = europeanOption.callPrice(binomialEngine, marketData, valuationDate);
+    const double putPriceEuropeanBinomial = europeanOption.putPrice(binomialEngine, marketData, valuationDate);
+
+    std::println("Call price: {:.2f}", callPriceEuropeanBinomial);
+    std::println("Put price: {:.2f}", putPriceEuropeanBinomial);
 
     // Binomial tree model (American style option)
-    std::cout << "\nBinomial tree model (American style option):" << std::endl;
-    engine.setPricingStrategy(std::make_unique<BinomialTreeModel>(numTimeSteps, OptionStyle::American));
-    std::cout << "Number of time steps: " << numTimeSteps << std::endl;
-    const double callPriceAmericanBinomial = engine.calculateCallPrice(strategyParams);
-    std::cout << "Call price: " << callPriceAmericanBinomial << std::endl;
-    const double putPriceAmericanBinomial = engine.calculatePutPrice(strategyParams);
-    std::cout << "Put price: " << putPriceAmericanBinomial << std::endl;
+
+    auto americanOption = Option<OptionStyle::American>(K, expirationDate);
+
+    std::println();
+    std::println("Binomial tree model (American style option):");
+    std::println("Number of time steps: {}", numTimeSteps);
+
+    const double callPriceAmericanBinomial = americanOption.callPrice(binomialEngine, marketData, valuationDate);
+    const double putPriceAmericanBinomial = americanOption.putPrice(binomialEngine, marketData, valuationDate);
+    
+    std::println("Call price: {:.2f}", callPriceAmericanBinomial);
+    std::println("Put price: {:.2f}", putPriceAmericanBinomial);
 
     return 0;
 }

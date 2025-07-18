@@ -14,9 +14,9 @@ endif()
 
 # Create the library
 add_library(OptPriEngine
-    src/PricingEngine.cpp
     src/BSMModel.cpp
     src/BinomialTreeModel.cpp
+    src/Utils.cpp
 )
 
 # Public headers
