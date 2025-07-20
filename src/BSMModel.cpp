@@ -12,7 +12,7 @@ namespace
     }
 }
 
-double BSMModel::calculateCallPrice(const StrategyParameters strategyParams, const OptionStyle /*optionStyle*/) const noexcept
+double BSMModel::calculateCallPrice(const StrategyParameters strategyParams, const OptionStyle /*optionStyle*/) noexcept
 {
     auto [K, S, sigma, r, T] = strategyParams;
 
@@ -22,7 +22,7 @@ double BSMModel::calculateCallPrice(const StrategyParameters strategyParams, con
     return S * normalCDF(d1) - K * std::exp(-r * T) * normalCDF(d2);
 }
 
-double BSMModel::calculatePutPrice(const StrategyParameters strategyParams, const OptionStyle /*optionStyle*/) const noexcept
+double BSMModel::calculatePutPrice(const StrategyParameters strategyParams, const OptionStyle /*optionStyle*/) noexcept
 {
     auto [K, S, sigma, r, T] = strategyParams;
 

@@ -13,12 +13,12 @@ class BinomialTreeModel
     static_assert(NumTimeSteps > 0, "Number of time steps must be greater than zero.");
     
 public:
-    [[nodiscard]] static constexpr bool supportsOptionStyle(const OptionStyle style) noexcept
+    [[nodiscard]] inline static constexpr bool supportsOptionStyle(const OptionStyle style) noexcept
     {
         return style == OptionStyle::American || style == OptionStyle::European;
     }
 
-    [[nodiscard]] inline double calculateCallPrice(const StrategyParameters strategyParams, const OptionStyle optionStyle) const noexcept
+    [[nodiscard]] inline static double calculateCallPrice(const StrategyParameters strategyParams, const OptionStyle optionStyle) noexcept
     {
         auto [S, K, sigma, r, T] = strategyParams;
 
@@ -52,7 +52,7 @@ public:
         return callPrices[0];
     }
 
-    [[nodiscard]] inline double calculatePutPrice(const StrategyParameters strategyParams, const OptionStyle optionStyle) const noexcept
+    [[nodiscard]] inline static double calculatePutPrice(const StrategyParameters strategyParams, const OptionStyle optionStyle) noexcept
     {
         auto [S, K, sigma, r, T] = strategyParams;
 
@@ -87,7 +87,7 @@ public:
     }
 
 private:
-    [[nodiscard]] std::vector<double> calculateAssetPrices(const double S, const double u, const double d, const double dT, const size_t maxNumNodes) const noexcept
+    [[nodiscard]] inline static std::vector<double> calculateAssetPrices(const double S, const double u, const double d, const double dT, const size_t maxNumNodes) noexcept
     {
         std::vector<double> assetPrices(maxNumNodes);
         for (size_t i = 0; i < maxNumNodes; ++i)
@@ -99,7 +99,7 @@ private:
         return assetPrices;
     }
 
-    [[nodiscard]] double getAssetPriceAtNode(const double S, const double u, const double d, const int timeStep, const int nodeIndex) const noexcept
+    [[nodiscard]] inline static double getAssetPriceAtNode(const double S, const double u, const double d, const int timeStep, const int nodeIndex) noexcept
     {
         return S * std::pow(u, timeStep - nodeIndex) * std::pow(d, nodeIndex);
     }

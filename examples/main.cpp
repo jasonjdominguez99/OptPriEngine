@@ -35,7 +35,7 @@ int main()
     std::println();
     std::println("Black-Scholes-Merton model:");
 
-    const auto blackScholesEngine = PricingEngine<BSMModel>(BSMModel());
+    const auto blackScholesEngine = PricingEngine<BSMModel>();
 
     const double callPriceBSM = europeanOption.callPrice(blackScholesEngine, marketData, valuationDate);
     const double putPriceBSM = europeanOption.putPrice(blackScholesEngine, marketData, valuationDate);
@@ -48,7 +48,7 @@ int main()
     std::println("Binomial tree model (European style option):");
 
     const size_t numTimeSteps = 1000;
-    const auto binomialEngine = PricingEngine<BinomialTreeModel<numTimeSteps>>(BinomialTreeModel<numTimeSteps>());
+    const auto binomialEngine = PricingEngine<BinomialTreeModel<numTimeSteps>>();
 
     std::println("Number of time steps: {}", numTimeSteps);
 

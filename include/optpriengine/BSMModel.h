@@ -12,6 +12,6 @@ public:
         return style == OptionStyle::European;
     }
 
-    [[nodiscard]] double calculateCallPrice(const StrategyParameters strategyParams, const OptionStyle optionStyle) const noexcept;
-    [[nodiscard]] double calculatePutPrice(const StrategyParameters strategyParams, const OptionStyle optionStyle) const noexcept;
+    [[nodiscard]] static double calculateCallPrice(const StrategyParameters strategyParams, const OptionStyle optionStyle) noexcept;
+    [[nodiscard]] static double calculatePutPrice(const StrategyParameters strategyParams, const OptionStyle optionStyle) noexcept;
 };
