@@ -1,6 +1,5 @@
 #include "optpriengine/BSMModel.h"
 #include "optpriengine/BinomialTreeModel.h"
-#include "optpriengine/PricingEngine.h"
 #include "optpriengine/Option.h"
 #include "optpriengine/Utils.h"
 
@@ -35,10 +34,8 @@ int main()
     std::println();
     std::println("Black-Scholes-Merton model:");
 
-    const auto blackScholesEngine = PricingEngine<BSMModel>();
-
-    const double callPriceBSM = europeanOption.callPrice(blackScholesEngine, marketData, valuationDate);
-    const double putPriceBSM = europeanOption.putPrice(blackScholesEngine, marketData, valuationDate);
+    const double callPriceBSM = europeanOption.callPrice<BSMModel>(marketData, valuationDate);
+    const double putPriceBSM = europeanOption.putPrice<BSMModel>(marketData, valuationDate);
 
     std::println("Call price: {:.2f}", callPriceBSM);
     std::println("Put price: {:.2f}", putPriceBSM);
@@ -48,12 +45,11 @@ int main()
     std::println("Binomial tree model (European style option):");
 
     const size_t numTimeSteps = 1000;
-    const auto binomialEngine = PricingEngine<BinomialTreeModel<numTimeSteps>>();
 
     std::println("Number of time steps: {}", numTimeSteps);
 
-    const double callPriceEuropeanBinomial = europeanOption.callPrice(binomialEngine, marketData, valuationDate);
-    const double putPriceEuropeanBinomial = europeanOption.putPrice(binomialEngine, marketData, valuationDate);
+    const double callPriceEuropeanBinomial = europeanOption.callPrice<BinomialTreeModel<numTimeSteps>>(marketData, valuationDate);
+    const double putPriceEuropeanBinomial = europeanOption.putPrice<BinomialTreeModel<numTimeSteps>>(marketData, valuationDate);
 
     std::println("Call price: {:.2f}", callPriceEuropeanBinomial);
     std::println("Put price: {:.2f}", putPriceEuropeanBinomial);
@@ -66,8 +62,8 @@ int main()
     std::println("Binomial tree model (American style option):");
     std::println("Number of time steps: {}", numTimeSteps);
 
-    const double callPriceAmericanBinomial = americanOption.callPrice(binomialEngine, marketData, valuationDate);
-    const double putPriceAmericanBinomial = americanOption.putPrice(binomialEngine, marketData, valuationDate);
+    const double callPriceAmericanBinomial = americanOption.callPrice<BinomialTreeModel<numTimeSteps>>(marketData, valuationDate);
+    const double putPriceAmericanBinomial = americanOption.putPrice<BinomialTreeModel<numTimeSteps>>(marketData, valuationDate);
     
     std::println("Call price: {:.2f}", callPriceAmericanBinomial);
     std::println("Put price: {:.2f}", putPriceAmericanBinomial);

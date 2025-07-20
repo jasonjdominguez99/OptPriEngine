@@ -1,7 +1,6 @@
 #pragma once
 
 #include "OptionStyle.h"
-#include "PricingEngine.h"
 #include "StrategyParameters.h"
 #include "Utils.h"
 
@@ -20,15 +19,15 @@ public:
         : m_strikePrice(strikePrice), m_expirationDate(expirationDate) {}
 
     template <typename Strategy>
-    [[nodiscard]] double callPrice(const PricingEngine<Strategy>& engine, const MarketData& marketData, const std::chrono::year_month_day& valuationDate) const noexcept {
-        static_assert(Strategy::supportsOptionStyle(Style), "Pricing engine strategy does not support the specified option style.");
-        return engine.calculateCallPrice({ m_strikePrice, marketData.spotPrice, marketData.volatility, marketData.riskFreeInterestRate, Utils::yearsBetween(valuationDate, m_expirationDate) }, Style);
+    [[nodiscard]] double callPrice(const MarketData& marketData, const std::chrono::year_month_day& valuationDate) const noexcept {
+        static_assert(Strategy::supportsOptionStyle(Style), "Pricing strategy does not support the specified option style.");
+        return Strategy::calculateCallPrice({ m_strikePrice, marketData.spotPrice, marketData.volatility, marketData.riskFreeInterestRate, Utils::yearsBetween(valuationDate, m_expirationDate) }, Style);
     }
 
     template <typename Strategy>
-    [[nodiscard]] double putPrice(const PricingEngine<Strategy>& engine, const MarketData& marketData, const std::chrono::year_month_day& valuationDate) const noexcept {
-        static_assert(Strategy::supportsOptionStyle(Style), "Pricing engine strategy does not support the specified option style.");
-        return engine.calculatePutPrice({ m_strikePrice, marketData.spotPrice, marketData.volatility, marketData.riskFreeInterestRate, Utils::yearsBetween(valuationDate, m_expirationDate) }, Style);
+    [[nodiscard]] double putPrice(const MarketData& marketData, const std::chrono::year_month_day& valuationDate) const noexcept {
+        static_assert(Strategy::supportsOptionStyle(Style), "Pricing strategy does not support the specified option style.");
+        return Strategy::calculatePutPrice({ m_strikePrice, marketData.spotPrice, marketData.volatility, marketData.riskFreeInterestRate, Utils::yearsBetween(valuationDate, m_expirationDate) }, Style);
     }
 
     [[nodiscard]] double getStrikePrice() const noexcept { return m_strikePrice; }
