@@ -14,4 +14,6 @@ public:
 
     [[nodiscard]] static double calculateCallPrice(const StrategyParameters strategyParams, const OptionStyle optionStyle) noexcept;
     [[nodiscard]] static double calculatePutPrice(const StrategyParameters strategyParams, const OptionStyle optionStyle) noexcept;
+    [[nodiscard]] static double calculateCallDelta(const StrategyParameters strategyParams) noexcept;
+    [[nodiscard]] static double calculatePutDelta(const StrategyParameters strategyParams) noexcept;
 };

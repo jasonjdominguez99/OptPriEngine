@@ -40,6 +40,13 @@ int main()
     std::println("Call price: {:.2f}", callPriceBSM);
     std::println("Put price: {:.2f}", putPriceBSM);
 
+    // Greeks
+    const double callDeltaBSM = europeanOption.callDelta<BSMModel>(marketData, valuationDate);
+    const double putDeltaBSM = europeanOption.putDelta<BSMModel>(marketData, valuationDate);
+
+    std::println("Call delta: {:.4f}", callDeltaBSM);
+    std::println("Put delta: {:.4f}", putDeltaBSM);
+
     // Binomial tree model (European style option)
     std::println();
     std::println("Binomial tree model (European style option):");

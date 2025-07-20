@@ -31,3 +31,21 @@ double BSMModel::calculatePutPrice(const StrategyParameters strategyParams, cons
 
     return K * std::exp(-r * T) * normalCDF(-d2) - S * normalCDF(-d1);
 }
+
+double BSMModel::calculateCallDelta(const StrategyParameters strategyParams) noexcept
+{
+    auto [K, S, sigma, r, T] = strategyParams;
+
+    const double d1 = (std::log(S / K) + (r + 0.5 * std::pow(sigma, 2)) * T) / (sigma * std::sqrt(T));
+
+    return normalCDF(d1);
+}
+
+double BSMModel::calculatePutDelta(const StrategyParameters strategyParams) noexcept
+{
+    auto [K, S, sigma, r, T] = strategyParams;
+
+    const double d1 = (std::log(S / K) + (r + 0.5 * std::pow(sigma, 2)) * T) / (sigma * std::sqrt(T));
+
+    return -normalCDF(-d1);
+}
