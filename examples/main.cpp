@@ -26,7 +26,13 @@ int main()
     std::println("r: {}", r);
     std::println("Expiration date: {}", expirationDate);
     std::println("Valuation date: {}", valuationDate);
-    std::println("Time to maturity: {:.3f} years", Utils::yearsBetween(valuationDate, expirationDate));
+
+    const auto yearsToMaturity = Utils::yearsBetween(valuationDate, expirationDate);
+    if (!yearsToMaturity) {
+        std::println("{}", yearsToMaturity.error().message);
+        return 1;
+    }
+    std::println("Time to maturity: {:.3f} years", yearsToMaturity.value());
 
     auto europeanOption = Option<OptionStyle::European>(K, expirationDate);
 
@@ -34,18 +40,36 @@ int main()
     std::println();
     std::println("Black-Scholes-Merton model:");
 
-    const double callPriceBSM = europeanOption.callPrice<BSMModel>(marketData, valuationDate);
-    const double putPriceBSM = europeanOption.putPrice<BSMModel>(marketData, valuationDate);
+    const auto callPriceBSM = europeanOption.callPrice<BSMModel>(marketData, valuationDate);
+    if (!callPriceBSM) {
+        std::println("{}", callPriceBSM.error().message);
+        return 1;
+    }
 
-    std::println("Call price: {:.2f}", callPriceBSM);
-    std::println("Put price: {:.2f}", putPriceBSM);
+    const auto putPriceBSM = europeanOption.putPrice<BSMModel>(marketData, valuationDate);
+    if (!putPriceBSM) {
+        std::println("{}", putPriceBSM.error().message);
+        return 1;
+    }
+
+    std::println("Call price: {:.2f}", callPriceBSM.value());
+    std::println("Put price: {:.2f}", putPriceBSM.value());
 
     // Greeks
-    const double callDeltaBSM = europeanOption.callDelta<BSMModel>(marketData, valuationDate);
-    const double putDeltaBSM = europeanOption.putDelta<BSMModel>(marketData, valuationDate);
+    const auto callDeltaBSM = europeanOption.callDelta<BSMModel>(marketData, valuationDate);
+    if (!callDeltaBSM) {
+        std::println("{}", callDeltaBSM.error().message);
+        return 1;
+    }
 
-    std::println("Call delta: {:.4f}", callDeltaBSM);
-    std::println("Put delta: {:.4f}", putDeltaBSM);
+    const auto putDeltaBSM = europeanOption.putDelta<BSMModel>(marketData, valuationDate);
+    if (!putDeltaBSM) {
+        std::println("{}", putDeltaBSM.error().message);
+        return 1;
+    }
+
+    std::println("Call delta: {:.4f}", callDeltaBSM.value());
+    std::println("Put delta: {:.4f}", putDeltaBSM.value());
 
     // Binomial tree model (European style option)
     std::println();
@@ -55,11 +79,20 @@ int main()
 
     std::println("Number of time steps: {}", numTimeSteps);
 
-    const double callPriceEuropeanBinomial = europeanOption.callPrice<BinomialTreeModel<numTimeSteps>>(marketData, valuationDate);
-    const double putPriceEuropeanBinomial = europeanOption.putPrice<BinomialTreeModel<numTimeSteps>>(marketData, valuationDate);
+    const auto callPriceEuropeanBinomial = europeanOption.callPrice<BinomialTreeModel<numTimeSteps>>(marketData, valuationDate);
+    if (!callPriceEuropeanBinomial) {
+        std::println("{}", callPriceEuropeanBinomial.error().message);
+        return 1;
+    }
 
-    std::println("Call price: {:.2f}", callPriceEuropeanBinomial);
-    std::println("Put price: {:.2f}", putPriceEuropeanBinomial);
+    const auto putPriceEuropeanBinomial = europeanOption.putPrice<BinomialTreeModel<numTimeSteps>>(marketData, valuationDate);
+    if (!putPriceEuropeanBinomial) {
+        std::println("{}", putPriceEuropeanBinomial.error().message);
+        return 1;
+    }
+
+    std::println("Call price: {:.2f}", callPriceEuropeanBinomial.value());
+    std::println("Put price: {:.2f}", putPriceEuropeanBinomial.value());
 
     // Binomial tree model (American style option)
 
@@ -69,11 +102,20 @@ int main()
     std::println("Binomial tree model (American style option):");
     std::println("Number of time steps: {}", numTimeSteps);
 
-    const double callPriceAmericanBinomial = americanOption.callPrice<BinomialTreeModel<numTimeSteps>>(marketData, valuationDate);
-    const double putPriceAmericanBinomial = americanOption.putPrice<BinomialTreeModel<numTimeSteps>>(marketData, valuationDate);
-    
-    std::println("Call price: {:.2f}", callPriceAmericanBinomial);
-    std::println("Put price: {:.2f}", putPriceAmericanBinomial);
+    const auto callPriceAmericanBinomial = americanOption.callPrice<BinomialTreeModel<numTimeSteps>>(marketData, valuationDate);
+    if (!callPriceAmericanBinomial) {
+        std::println("{}", callPriceAmericanBinomial.error().message);
+        return 1;
+    }
+
+    const auto putPriceAmericanBinomial = americanOption.putPrice<BinomialTreeModel<numTimeSteps>>(marketData, valuationDate);
+    if (!putPriceAmericanBinomial) {
+        std::println("{}", putPriceAmericanBinomial.error().message);
+        return 1;
+    }
+
+    std::println("Call price: {:.2f}", callPriceAmericanBinomial.value());
+    std::println("Put price: {:.2f}", putPriceAmericanBinomial.value());
 
     return 0;
 }

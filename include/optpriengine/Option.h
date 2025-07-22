@@ -5,6 +5,7 @@
 #include "Utils.h"
 
 #include <chrono>
+#include <expected>
 
 struct MarketData {
     double spotPrice; // Current price of the underlying asset
@@ -20,28 +21,52 @@ public:
 
     // Pricing
     template <typename Strategy>
-    [[nodiscard]] double callPrice(const MarketData& marketData, const std::chrono::year_month_day& valuationDate) const noexcept {
+    [[nodiscard]] std::expected<double, Error> callPrice(const MarketData& marketData, const std::chrono::year_month_day& valuationDate) const noexcept {
         static_assert(Strategy::supportsOptionStyle(Style), "Pricing strategy does not support the specified option style.");
-        return Strategy::calculateCallPrice({ m_strikePrice, marketData.spotPrice, marketData.volatility, marketData.riskFreeInterestRate, Utils::yearsBetween(valuationDate, m_expirationDate) }, Style);
+
+        const auto yearsToMaturity = Utils::yearsBetween(valuationDate, m_expirationDate);
+        if (!yearsToMaturity) {
+            return yearsToMaturity;
+        }
+
+        return Strategy::calculateCallPrice({ m_strikePrice, marketData.spotPrice, marketData.volatility, marketData.riskFreeInterestRate, yearsToMaturity.value() }, Style);
     }
 
     template <typename Strategy>
-    [[nodiscard]] double putPrice(const MarketData& marketData, const std::chrono::year_month_day& valuationDate) const noexcept {
+    [[nodiscard]] std::expected<double, Error> putPrice(const MarketData& marketData, const std::chrono::year_month_day& valuationDate) const noexcept {
         static_assert(Strategy::supportsOptionStyle(Style), "Pricing strategy does not support the specified option style.");
-        return Strategy::calculatePutPrice({ m_strikePrice, marketData.spotPrice, marketData.volatility, marketData.riskFreeInterestRate, Utils::yearsBetween(valuationDate, m_expirationDate) }, Style);
+
+        const auto yearsToMaturity = Utils::yearsBetween(valuationDate, m_expirationDate);
+        if (!yearsToMaturity) {
+            return yearsToMaturity;
+        }
+
+        return Strategy::calculatePutPrice({ m_strikePrice, marketData.spotPrice, marketData.volatility, marketData.riskFreeInterestRate, yearsToMaturity.value() }, Style);
     }
 
     // Greeks
     template <typename Strategy>
-    [[nodiscard]] double callDelta(const MarketData& marketData, const std::chrono::year_month_day& valuationDate) const noexcept {
+    [[nodiscard]] std::expected<double, Error> callDelta(const MarketData& marketData, const std::chrono::year_month_day& valuationDate) const noexcept {
         static_assert(Strategy::supportsOptionStyle(Style), "Pricing strategy does not support the specified option style.");
-        return Strategy::calculateCallDelta({ m_strikePrice, marketData.spotPrice, marketData.volatility, marketData.riskFreeInterestRate, Utils::yearsBetween(valuationDate, m_expirationDate) });
+
+        const auto yearsToMaturity = Utils::yearsBetween(valuationDate, m_expirationDate);
+        if (!yearsToMaturity) {
+            return yearsToMaturity;
+        }
+
+        return Strategy::calculateCallDelta({ m_strikePrice, marketData.spotPrice, marketData.volatility, marketData.riskFreeInterestRate, yearsToMaturity.value() });
     }
 
     template <typename Strategy>
-    [[nodiscard]] double putDelta(const MarketData& marketData, const std::chrono::year_month_day& valuationDate) const noexcept {
+    [[nodiscard]] std::expected<double, Error> putDelta(const MarketData& marketData, const std::chrono::year_month_day& valuationDate) const noexcept {
         static_assert(Strategy::supportsOptionStyle(Style), "Pricing strategy does not support the specified option style.");
-        return Strategy::calculatePutDelta({ m_strikePrice, marketData.spotPrice, marketData.volatility, marketData.riskFreeInterestRate, Utils::yearsBetween(valuationDate, m_expirationDate) });
+
+        const auto yearsToMaturity = Utils::yearsBetween(valuationDate, m_expirationDate);
+        if (!yearsToMaturity) {
+            return yearsToMaturity;
+        }
+
+        return Strategy::calculatePutDelta({ m_strikePrice, marketData.spotPrice, marketData.volatility, marketData.riskFreeInterestRate, yearsToMaturity.value() });
     }
 
     // Properties
