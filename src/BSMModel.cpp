@@ -4,12 +4,15 @@
 
 #include <cmath>
 
+namespace optpriengine
+{
+
 namespace
 {
-    double normalCDF(const double x)
-    {
-        return 0.5 * (1 + std::erf(x / std::sqrt(2)));
-    }
+double normalCDF(const double x)
+{
+    return 0.5 * (1 + std::erf(x / std::sqrt(2)));
+}
 }
 
 double BSMModel::calculateCallPrice(const StrategyParameters strategyParams, const OptionStyle /*optionStyle*/) noexcept
@@ -49,3 +52,5 @@ double BSMModel::calculatePutDelta(const StrategyParameters strategyParams) noex
 
     return -normalCDF(-d1);
 }
+
+} // namespace optpriengine

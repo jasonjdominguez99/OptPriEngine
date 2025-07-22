@@ -1,5 +1,10 @@
 #include <gtest/gtest.h>
 
-TEST(BinomialTreeModelTest, DummyTest) {
+#include "optpriengine/BinomialTreeModel.h"
+
+using namespace optpriengine;
+
+TEST(BinomialTreeModelTest, DummyTest)
+{
     EXPECT_TRUE(true);
 }

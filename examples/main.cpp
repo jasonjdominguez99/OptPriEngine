@@ -6,6 +6,8 @@
 #include <chrono>
 #include <print>
 
+using namespace optpriengine;
+
 int main()
 {
     const double K = 100.0;
@@ -28,7 +30,8 @@ int main()
     std::println("Valuation date: {}", valuationDate);
 
     const auto yearsToMaturity = Utils::yearsBetween(valuationDate, expirationDate);
-    if (!yearsToMaturity) {
+    if (!yearsToMaturity)
+    {
         std::println("{}", yearsToMaturity.error().message);
         return 1;
     }
@@ -41,13 +44,15 @@ int main()
     std::println("Black-Scholes-Merton model:");
 
     const auto callPriceBSM = europeanOption.callPrice<BSMModel>(marketData, valuationDate);
-    if (!callPriceBSM) {
+    if (!callPriceBSM)
+    {
         std::println("{}", callPriceBSM.error().message);
         return 1;
     }
 
     const auto putPriceBSM = europeanOption.putPrice<BSMModel>(marketData, valuationDate);
-    if (!putPriceBSM) {
+    if (!putPriceBSM)
+    {
         std::println("{}", putPriceBSM.error().message);
         return 1;
     }
@@ -57,13 +62,15 @@ int main()
 
     // Greeks
     const auto callDeltaBSM = europeanOption.callDelta<BSMModel>(marketData, valuationDate);
-    if (!callDeltaBSM) {
+    if (!callDeltaBSM)
+    {
         std::println("{}", callDeltaBSM.error().message);
         return 1;
     }
 
     const auto putDeltaBSM = europeanOption.putDelta<BSMModel>(marketData, valuationDate);
-    if (!putDeltaBSM) {
+    if (!putDeltaBSM)
+    {
         std::println("{}", putDeltaBSM.error().message);
         return 1;
     }
@@ -80,13 +87,15 @@ int main()
     std::println("Number of time steps: {}", numTimeSteps);
 
     const auto callPriceEuropeanBinomial = europeanOption.callPrice<BinomialTreeModel<numTimeSteps>>(marketData, valuationDate);
-    if (!callPriceEuropeanBinomial) {
+    if (!callPriceEuropeanBinomial)
+    {
         std::println("{}", callPriceEuropeanBinomial.error().message);
         return 1;
     }
 
     const auto putPriceEuropeanBinomial = europeanOption.putPrice<BinomialTreeModel<numTimeSteps>>(marketData, valuationDate);
-    if (!putPriceEuropeanBinomial) {
+    if (!putPriceEuropeanBinomial)
+    {
         std::println("{}", putPriceEuropeanBinomial.error().message);
         return 1;
     }
@@ -103,13 +112,15 @@ int main()
     std::println("Number of time steps: {}", numTimeSteps);
 
     const auto callPriceAmericanBinomial = americanOption.callPrice<BinomialTreeModel<numTimeSteps>>(marketData, valuationDate);
-    if (!callPriceAmericanBinomial) {
+    if (!callPriceAmericanBinomial)
+    {
         std::println("{}", callPriceAmericanBinomial.error().message);
         return 1;
     }
 
     const auto putPriceAmericanBinomial = americanOption.putPrice<BinomialTreeModel<numTimeSteps>>(marketData, valuationDate);
-    if (!putPriceAmericanBinomial) {
+    if (!putPriceAmericanBinomial)
+    {
         std::println("{}", putPriceAmericanBinomial.error().message);
         return 1;
     }

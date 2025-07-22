@@ -7,25 +7,34 @@
 #include <chrono>
 #include <expected>
 
-struct MarketData {
+namespace optpriengine
+{
+
+struct MarketData
+{
     double spotPrice; // Current price of the underlying asset
     double volatility; // Volatility of the underlying asset (% per year)
     double riskFreeInterestRate; // Risk-free interest rate (% per year)
 };
 
 template <OptionStyle Style>
-class Option {
+class Option
+{
 public:
     explicit Option(const double strikePrice, const std::chrono::year_month_day& expirationDate) noexcept
-        : m_strikePrice(strikePrice), m_expirationDate(expirationDate) {}
+        :
+        m_strikePrice(strikePrice),
+        m_expirationDate(expirationDate) {}
 
     // Pricing
     template <typename Strategy>
-    [[nodiscard]] std::expected<double, Error> callPrice(const MarketData& marketData, const std::chrono::year_month_day& valuationDate) const noexcept {
+    [[nodiscard]] std::expected<double, Error> callPrice(const MarketData& marketData, const std::chrono::year_month_day& valuationDate) const noexcept
+    {
         static_assert(Strategy::supportsOptionStyle(Style), "Pricing strategy does not support the specified option style.");
 
         const auto yearsToMaturity = Utils::yearsBetween(valuationDate, m_expirationDate);
-        if (!yearsToMaturity) {
+        if (!yearsToMaturity)
+        {
             return yearsToMaturity;
         }
 
@@ -33,11 +42,13 @@ public:
     }
 
     template <typename Strategy>
-    [[nodiscard]] std::expected<double, Error> putPrice(const MarketData& marketData, const std::chrono::year_month_day& valuationDate) const noexcept {
+    [[nodiscard]] std::expected<double, Error> putPrice(const MarketData& marketData, const std::chrono::year_month_day& valuationDate) const noexcept
+    {
         static_assert(Strategy::supportsOptionStyle(Style), "Pricing strategy does not support the specified option style.");
 
         const auto yearsToMaturity = Utils::yearsBetween(valuationDate, m_expirationDate);
-        if (!yearsToMaturity) {
+        if (!yearsToMaturity)
+        {
             return yearsToMaturity;
         }
 
@@ -46,11 +57,13 @@ public:
 
     // Greeks
     template <typename Strategy>
-    [[nodiscard]] std::expected<double, Error> callDelta(const MarketData& marketData, const std::chrono::year_month_day& valuationDate) const noexcept {
+    [[nodiscard]] std::expected<double, Error> callDelta(const MarketData& marketData, const std::chrono::year_month_day& valuationDate) const noexcept
+    {
         static_assert(Strategy::supportsOptionStyle(Style), "Pricing strategy does not support the specified option style.");
 
         const auto yearsToMaturity = Utils::yearsBetween(valuationDate, m_expirationDate);
-        if (!yearsToMaturity) {
+        if (!yearsToMaturity)
+        {
             return yearsToMaturity;
         }
 
@@ -58,11 +71,13 @@ public:
     }
 
     template <typename Strategy>
-    [[nodiscard]] std::expected<double, Error> putDelta(const MarketData& marketData, const std::chrono::year_month_day& valuationDate) const noexcept {
+    [[nodiscard]] std::expected<double, Error> putDelta(const MarketData& marketData, const std::chrono::year_month_day& valuationDate) const noexcept
+    {
         static_assert(Strategy::supportsOptionStyle(Style), "Pricing strategy does not support the specified option style.");
 
         const auto yearsToMaturity = Utils::yearsBetween(valuationDate, m_expirationDate);
-        if (!yearsToMaturity) {
+        if (!yearsToMaturity)
+        {
             return yearsToMaturity;
         }
 
@@ -70,10 +85,12 @@ public:
     }
 
     // Properties
-    [[nodiscard]] double getStrikePrice() const noexcept { return m_strikePrice; }
+    [[nodiscard]] double                      getStrikePrice() const noexcept { return m_strikePrice; }
     [[nodiscard]] std::chrono::year_month_day getExpirationDate() const noexcept { return m_expirationDate; }
 
 private:
-    double m_strikePrice; // Strike price of the option
+    double                      m_strikePrice; // Strike price of the option
     std::chrono::year_month_day m_expirationDate; // Expiration date of the option
 };
+
+} // namespace optpriengine

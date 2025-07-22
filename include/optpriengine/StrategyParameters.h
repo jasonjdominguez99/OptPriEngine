@@ -2,6 +2,9 @@
 
 #include "OptionStyle.h"
 
+namespace optpriengine
+{
+
 struct StrategyParameters
 {
     double strikePrice;
@@ -10,3 +13,5 @@ struct StrategyParameters
     double riskFreeInterestRate; // % per year
     double timeToMaturity; // years
 };
+
+} // namespace optpriengine

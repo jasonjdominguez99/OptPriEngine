@@ -7,11 +7,14 @@
 #include <cstddef>
 #include <vector>
 
+namespace optpriengine
+{
+
 template <size_t NumTimeSteps>
 class BinomialTreeModel
 {
     static_assert(NumTimeSteps > 0, "Number of time steps must be greater than zero.");
-    
+
 public:
     [[nodiscard]] inline static constexpr bool supportsOptionStyle(const OptionStyle style) noexcept
     {
@@ -104,3 +107,5 @@ private:
         return S * std::pow(u, timeStep - nodeIndex) * std::pow(d, nodeIndex);
     }
 };
+
+} // namespace optpriengine

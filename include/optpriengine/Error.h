@@ -3,6 +3,9 @@
 #include <expected>
 #include <string>
 
+namespace optpriengine
+{
+
 enum class ErrorCode
 {
     InvalidDateRange = 1
@@ -10,8 +13,12 @@ enum class ErrorCode
 
 struct Error
 {
-    ErrorCode code;
+    ErrorCode   code;
     std::string message;
-    
-    explicit Error(ErrorCode errorCode, std::string msg) : code(errorCode), message("Error: " + std::move(msg)) {}
+
+    explicit Error(ErrorCode errorCode, std::string msg) :
+        code(errorCode),
+        message("Error: " + std::move(msg)) {}
 };
+
+} // namespace optpriengine

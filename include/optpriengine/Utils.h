@@ -4,7 +4,9 @@
 
 #include <chrono>
 
-namespace Utils
+namespace optpriengine::Utils
 {
-    [[nodiscard]] std::expected<double, Error> yearsBetween(const std::chrono::year_month_day& start, const std::chrono::year_month_day& end) noexcept;
-}
+
+[[nodiscard]] std::expected<double, Error> yearsBetween(const std::chrono::year_month_day& start, const std::chrono::year_month_day& end) noexcept;
+
+} // namespace optpriengine::Utils
